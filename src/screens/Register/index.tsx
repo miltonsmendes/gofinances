@@ -23,10 +23,16 @@ import {
   TransactionsType,
 } from "./styles";
 
-interface FormData {
-  name: string;
-  amount: string;
+// interface FormData {
+//   name: string;
+//   amount: string;
+// }
+
+
+export type FormData = {
+  [name: string]: any;
 }
+
 
 const schema = Yup.object().shape({
   name: Yup.string().required("Nome é obrigatório"),
