@@ -19,6 +19,8 @@ import { AppRoutes } from "./src/routes/app.routes";
 
 import { Signin } from "./src/screens/Signin";
 
+import { AuthProvider } from "./src/hooks/auth";
+
 export default function App() {
   const [fontLoaded] = useFonts({
     Poppins_400Regular,
@@ -35,7 +37,9 @@ export default function App() {
       <NavigationContainer>
         <StatusBar barStyle="light-content" />
         {/* <AppRoutes /> */}
-        <Signin />
+        <AuthProvider>
+          <Signin />
+        </AuthProvider>
       </NavigationContainer>
     </ThemeProvider>
   );
