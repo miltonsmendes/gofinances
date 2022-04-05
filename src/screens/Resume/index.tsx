@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { ActivityIndicator } from "react-native";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -8,7 +8,7 @@ import { RFValue } from "react-native-responsive-fontsize";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { addMonths, subMonths, format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { useFocusEffect} from '@react-navigation/native';
+import { useFocusEffect } from "@react-navigation/native";
 import { useAuth } from "../../hooks/auth";
 
 import { HistoryCard } from "../../components/HistoryCard";
@@ -24,6 +24,7 @@ import {
   MonthSelectIcon,
   Month,
   LoadContainer,
+  NoDataText,
 } from "./styles";
 import { useTheme } from "styled-components";
 
@@ -48,10 +49,9 @@ export function Resume() {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [totalByCategory, setTotalByCategory] = useState<CategoryData[]>([]);
-
   const theme = useTheme();
 
-  const {user} = useAuth();
+  const { user } = useAuth();
 
   function handleDateChange(action: "next" | "prev") {
     if (action === "next") {
@@ -129,12 +129,11 @@ export function Resume() {
         <Title>Resumo por categoria</Title>
       </Header>
 
-      {
-      isLoading ? 
+      {isLoading ? (
         <LoadContainer>
           <ActivityIndicator color={theme.colors.primary} size="large" />
         </LoadContainer>
-       : 
+      ) : (
         <Content
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
@@ -156,22 +155,26 @@ export function Resume() {
             </MonthSelectButton>
           </MonthSelect>
 
-          <ChartContainer>
-            <VictoryPie
-              data={totalByCategory}
-              colorScale={totalByCategory.map((category) => category.color)}
-              style={{
-                labels: {
-                  fontSize: RFValue(18),
-                  fontWeight: "bold",
-                  fill: theme.colors.shape,
-                },
-              }}
-              labelRadius={50}
-              x="percent"
-              y="total"
-            />
-          </ChartContainer>
+          {totalByCategory.length ? (
+            <ChartContainer>
+              <VictoryPie
+                data={totalByCategory}
+                colorScale={totalByCategory.map((category) => category.color)}
+                style={{
+                  labels: {
+                    fontSize: RFValue(18),
+                    fontWeight: "bold",
+                    fill: theme.colors.shape,
+                  },
+                }}
+                labelRadius={50}
+                x="percent"
+                y="total"
+              />
+            </ChartContainer>
+          ) : (
+            <NoDataText>Não há transações neste mês!</NoDataText>
+          )}
 
           {totalByCategory.map((item) => (
             <HistoryCard
@@ -182,7 +185,7 @@ export function Resume() {
             />
           ))}
         </Content>
-      }
+      )}
     </Container>
   );
 }

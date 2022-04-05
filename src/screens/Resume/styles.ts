@@ -58,3 +58,15 @@ export const LoadContainer = styled.View`
   justify-content: center;
   align-items: center;
 `;
+
+export const NoDataText = styled.Text`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+  margin-top: 60%;
+  font-family: ${({ theme }) => theme.fonts.regular};
+  font-size: ${RFValue(18)}px;
+  color: ${({ theme }) => theme.colors.attention_light};
+`;
